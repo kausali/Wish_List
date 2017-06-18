@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<title>My Wish List</title>
+	<meta charset="utf-8">
+	{% load staticfiles %}
+      <!-- The line above tells Django to be ready to listen for static files -->
+      <link rel="stylesheet" href="{% static 'dashboard/css/style.css' %}" media="screen" title="no title"  charset="utf-8">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+	</head>
+
+
+	<body>
+	<div id="container">
+	<h2>Hello {{request.session.name}} !</h2>
+	<a href="{%url 'items:logout' %}">Logout</a><br>
+
+	<ul>
+	{% if messages %}
+	{% for message in messages %}
+
+	<li>{{ message }}</li>
+	{% endfor %}
+	{% endif %}
+	</ul>
+
+	Your Wish List:<br>
+
+	<table class="table table-bordered">
+		<thead>
+		<tr>
+			<th>Item</th>
+			<th>Added by</th>
+			<th>Date Added</th>
+			<th>Actions</th>
+		</tr>
+		</thead>
+		<tbody>
+
+		{% for item in items %}
+		<tr>
+			<td><a href="{%url 'items:item_detail' item.id %}">{{ item.item_name}}</a></td>
+			<td>{{item.created_by.name}}</td>
+			<td>{{item.created_at.date}}</td>
+			{% if item.created_by.id == request.session.id %}
+			<td><a href="{%url 'items:delete' item.id  %}">Delete</a></td>
+			{% else %}
+			<td><a href="{%url 'items:remove' item.id  %}">Remove from my wishlist</a></td>
+		</tr>
+
+		{% endif %}
+		{% endfor %}
+
+		</tbody>
+	</table><br>
+
+	<a href="{%url 'items:create' %}">Add Item</a><br><br>
+
+	Other User's Wish List:<br>
+	<table class="table table-bordered">
+		<thead>
+		<tr>
+			<th>Item</th>
+			<th>Added by</th>
+			<th>Date Added</th>
+		<th>Actions</th>
+		</tr>
+		</thead>
+		<tbody>
+		{% for item in items_wished %}
+		{% if item.created_by.id != request.session.id %}
+		<tr>
+			<td><a href="{%url 'items:item_detail' item.id %}">{{ item.item_name}}</a></td>
+			<td>{{item.created_by.name}}</td>
+			<td>{{item.created_at.date}}</td>
+			<td><a href="{%url 'items:move_up' item.id  %}">Add to my Wishlist</a></td>
+		</tr>
+		{% endif %}
+		{% endfor %}
+		</tbody><br>
+	</table>
+
+	</div>
+	</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  	<title>Login and Registration</title>
+    <style type="text/css">
+  		fieldset{
+  			width: 400px;
+        display: inline-block;
+        vertical-align: top;
+        height: 240px;
+  		}
+  	</style>
+  </head>
+  <body>
+    <div id="container">
+      <h1>Welcome</h1>
+    <fieldset>
+    <legend><h1>Registration</h1></legend>
+    <form action="/register" method="POST">
+      {% csrf_token%}
+    	Name: <input type="text" name="name"><br>
+    	Username: <input type="text" name="username"><br>
+    	Password: <input type="Password" name="password"><br>
+    	Confirm pw: <input type="password" name="confirm_pw"><br>
+      Date Hired: <input type="date" name="date"><br>
+    	<input type="submit" name="submit" value="Register">
+
+
+    </form>
+  </fieldset>
+
+  <fieldset>
+  <legend><h1>Login</h1></legend>
+
+    <form action="/login" method="POST">
+      {% csrf_token%}
+    	Username : <input type="text" name="username"><br>
+    	Password: <input type="Password" name="password"><br>
+    	<input type="submit" name="submit" value="Login">
+
+    </form>
+  </fieldset>
+  </body>
+  </div>
+
+  {% if messages%}
+  {% for message in messages%}
+  <ul>
+    <li>{{message}}</li>
+  </ul>
+  {%endfor%}
+  {% endif%}
+</html>
